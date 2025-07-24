@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-#include <set>
+#include <vector>
 #include <afxdtctl.h>
 
 // CAnnualLeaveDlg 대화 상자
@@ -18,6 +18,16 @@ public:
 	enum { IDD = IDD_DIALOG };
 #endif
 
+	struct DayOffRecord
+	{
+		CString reason;       // 사유
+		CTime   startDate;    // 시작일
+		CTime   endDate;      // 종료일
+		bool    countedAsAttendance; // 출근 간주 여부 (O = true, X = false)
+	};
+
+	std::vector<DayOffRecord> m_dayOffRecords;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	virtual BOOL OnInitDialog();
@@ -25,17 +35,15 @@ protected:
 
 private:
 	CMonthCalCtrl m_calendar;      // 달력 컨트롤
-	CListBox m_listBox;            // 선택 날짜 리스트박스
-	std::set<COleDateTime> m_selectedDates; // 선택된 날짜 저장용 set
+	CListCtrl m_listDayOffType;
 
 	CComboBox m_comboWorkType;      // 방학중 근무 여부 콤보박스
 	CComboBox m_comboWorkplace;     // 근무지 콤보박스
+	CComboBox m_comboDayOffType;    // 미출근 유형 콤보박스
 	CDateTimeCtrl m_dateStartDate;  // 근무시작일 날짜 선택기
 
-	CDateTimeCtrl m_dateSummerVacationStart; // 여름방학 시작일
-	CDateTimeCtrl m_dateSummerVacationEnd;   // 여름방학 종료일
-	CDateTimeCtrl m_dateWinterVacationStart; // 겨울방학 시작일
-	CDateTimeCtrl m_dateWinterVacationEnd;   // 겨울방학 종료일
+	CDateTimeCtrl m_dateDayoffStart; // 미출근 시작일
+	CDateTimeCtrl m_dateDayoffEnd;   // 미출근 종료일
 
 	CStatic m_staticResult;          // 근속 결과 표시용 Static 텍스트
 
@@ -48,13 +56,19 @@ public:
 	afx_msg void OnCbnSelchangeComboWorkSite();
 	afx_msg void OnDtnDatetimechangeDatetimepickerWorkStartDate(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedButtonCalculate();
-	afx_msg void OnMcnSelchangeMonthcalendar(NMHDR* pNMHDR, LRESULT* pResult);
 
-	void UpdateSelectedDateList();
-	void SetVacationDateControlsEnable(BOOL bEnable);
-
-	afx_msg void OnDtnDatetimechangeDatetimepickerSummerVacationStart(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDtnDatetimechangeDatetimepickerSummerVacationEnd(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDtnDatetimechangeDatetimepickerWinterVacationStart(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDtnDatetimechangeDatetimepickerWinterVacationEnd(NMHDR* pNMHDR, LRESULT* pResult);
+	int CountSaturdaysInYear(int year);
+	int CountDaysExcludeSaturday(const CTime& startDate, const CTime& endDate);
+	double CalculateAttendanceRate(int workType);
+	int CalculateAnnualLeaveWithAttendance(
+		const CTime& joinDate,
+		const CTime& today,
+		int workType           // 0=상시근무자, 1=비상시근무자
+	);
+	void UpdateDayOffTypeCombo(int workType);
+	int CountWeekendsInPeriod(const CTime& startDate, const CTime& endDate);
+	int CountDaysOff(const CTime& startDate, const CTime& endDate);
+	int CalculateWorkDaysAuto(const CTime& periodStart, const CTime& periodEnd);
+	afx_msg void OnBnClickedButtonAddDate();
+	afx_msg void OnBnClickedButtonDelDate();
 };

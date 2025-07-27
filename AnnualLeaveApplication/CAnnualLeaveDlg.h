@@ -34,6 +34,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+	CFont m_fontHeaderBold;
 	CMonthCalCtrl m_calendar;      // 달력 컨트롤
 	CListCtrl m_listDayOffType;
 
@@ -44,8 +45,6 @@ private:
 
 	CDateTimeCtrl m_dateDayoffStart; // 미출근 시작일
 	CDateTimeCtrl m_dateDayoffEnd;   // 미출근 종료일
-
-	CStatic m_staticResult;          // 근속 결과 표시용 Static 텍스트
 
 	// 변수 또는 상태 저장용 (DoDataExchange 맵핑 가능)
 	int m_nWorkTypeSel;

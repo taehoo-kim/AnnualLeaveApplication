@@ -5,6 +5,7 @@
 #include "AnnualLeaveApplication.h"
 #include "afxdialogex.h"
 #include "CAnnualLeaveDlg.h"
+#include "CResultDlg.h"
 
 #include <atlconv.h>
 
@@ -32,7 +33,6 @@ void CAnnualLeaveDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_DATETIMEPICKER_WORK_START_DATE, m_dateStartDate);
     DDX_Control(pDX, IDC_DATETIMEPICKER_DAY_START, m_dateDayoffStart);
     DDX_Control(pDX, IDC_DATETIMEPICKER_DAY_END, m_dateDayoffEnd);
-    DDX_Control(pDX, IDC_STATIC_RESULT, m_staticResult);
 	DDX_Control(pDX, IDC_COMBO_DAYOFF_REASON, m_comboDayOffType);
     DDX_Control(pDX, IDC_LIST_DAYOFF_TYPE, m_listDayOffType);
 }
@@ -58,6 +58,19 @@ BOOL CAnnualLeaveDlg::OnInitDialog()
     m_listDayOffType.InsertColumn(0, _T("사유"), LVCFMT_LEFT, 80);
     m_listDayOffType.InsertColumn(1, _T("기간"), LVCFMT_LEFT, 180);
     m_listDayOffType.InsertColumn(2, _T("출근 간주"), LVCFMT_LEFT, 80);
+
+   
+    CHeaderCtrl* pHeader = m_listDayOffType.GetHeaderCtrl();
+    if (pHeader && m_fontHeaderBold.m_hObject == NULL) {
+        LOGFONT lf = { 0 };
+        CFont* pOldFont = pHeader->GetFont();
+        if (pOldFont) {
+            pOldFont->GetLogFont(&lf);
+        }
+        lf.lfWeight = FW_BOLD;   // Bold
+        m_fontHeaderBold.CreateFontIndirect(&lf);
+        pHeader->SetFont(&m_fontHeaderBold);
+    }
 
     m_nWorkTypeSel = 0;
     m_nWorkplaceSel = 0;
@@ -97,9 +110,6 @@ BOOL CAnnualLeaveDlg::OnInitDialog()
     m_dateStartDate.SetTime(&sysTime);
 
     m_ctStartDate = curTime;
-
-    // 초기 결과 텍스트 공백
-    m_staticResult.SetWindowText(_T("근무지: \n근무형태: \n계산된 연차 일수: 일\n\n%s"));
 
     return TRUE;
 }
@@ -206,7 +216,9 @@ void CAnnualLeaveDlg::OnBnClickedButtonCalculate()
         annualLeaveDays,
         strStandardDate);
 
-    m_staticResult.SetWindowText(strResult);
+    CResultDlg dlgResult;
+    dlgResult.SetResultString(strResult);
+    dlgResult.DoModal(); // 모달로 결과 창 띄우기
 }
 
 void CAnnualLeaveDlg::UpdateDayOffTypeCombo(int workType)

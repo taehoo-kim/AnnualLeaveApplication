@@ -187,6 +187,7 @@
     <ClInclude Include="AnnualLeaveApplicationDoc.h" />
     <ClInclude Include="AnnualLeaveApplicationView.h" />
     <ClInclude Include="CAnnualLeaveDlg.h" />
+    <ClInclude Include="CResultDlg.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="AnnualLeaveApplicationDoc.cpp" />
     <ClCompile Include="AnnualLeaveApplicationView.cpp" />
     <ClCompile Include="CAnnualLeaveDlg.cpp" />
+    <ClCompile Include="CResultDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

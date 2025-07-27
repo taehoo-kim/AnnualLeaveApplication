@@ -7,6 +7,8 @@
 #define IDR_MAINFRAME                   128
 #define IDR_AnnualLeaveApplicationTYPE  130
 #define IDD_DIALOG                      310
+#define IDD_DIALOG1                     312
+#define IDD_DIALOG_RESULT               312
 #define IDC_COMBO_VACATION_WORK         1000
 #define IDC_COMBO_WORK_SITE             1001
 #define IDC_STATIC_VACATION_WORK        1002
@@ -42,7 +44,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_RESOURCE_VALUE        314
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1031
 #define _APS_NEXT_SYMED_VALUE           310
